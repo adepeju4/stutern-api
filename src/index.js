@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import client from './database/index.js';
-import { getUsers } from './queries/index.js';
+import { getUsers, createUsers, updateUser, getUser, deleteUser } from './queries/index.js';
 
 const app = express();
 const port = process.env.PORT || 8000;
@@ -12,21 +12,27 @@ app.use(express.json());
 client.connect();
 
 app.get('/', (req, res) => {
-  res.json({
-    status: 'success',
-    message: 'hello world',
-  });
+    res.json({
+        status: 'success',
+        message: 'hello world',
+    });
 });
 
+
 //create
+app.post('/users', createUsers)
 
-
-//read
+//read all users
 app.get('/users', getUsers);
 
-//update
+//read a specific user
+app.get('/users/:id', getUser);
 
+//update
+app.patch('/users/:id', updateUser);
 //delete
+app.delete('/users/:id', deleteUser);
+
 app.listen(port, () => {
-  console.log(`Server connected at  http://localhost:${port}`);
+    console.log(`Server connected at  http://localhost:${port}`);
 });
